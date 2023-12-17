@@ -10,8 +10,9 @@ const String kStrHelp = 'help';
 const String kStrVersion = 'version';
 const String kStrWatch = 'watch';
 
-const String kStrPositionalName = 'tikz tex file path';
+const String kStrPositionalName = 'tikz tex or dart file path';
 
+const String kDartSuffix = '.dart';
 const String kTexSuffix = '.tex';
 const String kSvgSuffix = '.svg';
 
@@ -44,7 +45,11 @@ void printUsage(ArgParser argParser) {
 Future<void> tikzToSvg(String texPath) async {
   final String svgPath =
       texPath.substring(0, texPath.length - kTexSuffix.length) + kSvgSuffix;
-  await TikzWrapper.fromFile(texPath).toSvg(svgPath);
+  await LatexWrapper.fromTikzFile(texPath).toSvg(svgPath);
+}
+
+Future<void> dartToSvg(String dartPath) async {
+  await Shell().run('dart $dartPath');
 }
 
 Future<void> main(List<String> arguments) async {
@@ -67,20 +72,29 @@ Future<void> main(List<String> arguments) async {
     }
 
     final bool isWatching = results.wasParsed(kStrWatch);
-    final String texPath = results.rest[0];
+    final String filepath = results.rest[0];
 
-    if (!texPath.endsWith(kTexSuffix)) {
-      print('Error: $texPath does not have a $kTexSuffix suffix.');
+    final bool isDart = filepath.endsWith(kDartSuffix);
+    final bool isTex = filepath.endsWith(kTexSuffix);
+
+    if (!isTex && !isDart) {
+      print('Error: $filepath does not have a valid suffix.');
       printUsage(argParser);
       exit(1);
     }
 
-    await tikzToSvg(texPath);
+    Future<void> build() async {
+      await (isDart ? dartToSvg(filepath) : tikzToSvg(filepath));
+    }
+
+    await build();
 
     if (isWatching) {
-      File(texPath).watch(events: FileSystemEvent.modify).listen((event) async {
+      File(filepath)
+          .watch(events: FileSystemEvent.modify)
+          .listen((event) async {
         print('File change: $event');
-        await tikzToSvg(texPath);
+        await build();
       });
     }
   } on FormatException catch (e) {

@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 import 'package:process_run/shell.dart';
+import 'package:tikd/picture.dart';
 
 const String kName = 'tikd';
 
-class TikzWrapper {
+class LatexWrapper {
   static const String kHeader = r'''
 \documentclass[crop,tikz,multi=false]{standalone}
 
@@ -20,8 +21,17 @@ class TikzWrapper {
 
   static const String kFooter = r'\end{document}';
 
-  TikzWrapper.fromFile(String path) {
+  /// From a .tex file with \begin{tikzpicture} and \end{tikzpicture}.
+  LatexWrapper.fromTikzFile(String path) {
     _lines = File(path).readAsLinesSync();
+  }
+
+  LatexWrapper.fromPicture(TikzPicture picture) {
+    _lines = [
+      TikzPicture.kBegin,
+      ...picture.lines,
+      TikzPicture.kEnd,
+    ];
   }
 
   Future<void> toSvg(String svgPath) async {
@@ -38,6 +48,7 @@ class TikzWrapper {
     await shell.run('pdf2svg tmp.pdf $kSvgName');
     final tmpPath = p.join(dir.path, kSvgName);
     File(tmpPath).renameSync(svgPath);
+    print('Generated $svgPath');
     dir.deleteSync(recursive: true);
   }
 
