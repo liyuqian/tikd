@@ -1,6 +1,16 @@
+import 'package:tikd/base.dart';
+import 'package:tikd/style.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class TikzPicture {
+  TikzPicture({this.options = const [], this.namedStyles = const []}) {
+    lines
+      ..add('[')
+      ..addAll(options.map((o) => '  ${o.toRaw()},'))
+      ..addAll(namedStyles.map((s) => '  ${s.toRaw()},'))
+      ..add(']');
+  }
+
   static const String kBegin = r'\begin{tikzpicture}';
   static const String kEnd = r'\end{tikzpicture}';
 
@@ -8,22 +18,21 @@ class TikzPicture {
     lines.add(r'\draw ' '$raw;');
   }
 
-  void draw(UnitElement element) {
+  void draw(RawElement element) {
     drawRaw(element.toRaw());
   }
 
+  final List<StyleOption> options;
+  final List<Style> namedStyles;
   final List<String> lines = [];
 }
 
 /// Element with uniform units.
-abstract class UnitElement {
-  /// Default unit is empty.
+abstract class UnitElement implements RawElement {
+  /// The default empty unit is cm in TIKZ.
   UnitElement({this.unit = ""});
 
   final String unit;
-
-  /// Raw string representation of the element.
-  String toRaw();
 
   String uu(double v) => '$v$unit';
 }
