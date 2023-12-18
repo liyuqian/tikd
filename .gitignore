@@ -7,3 +7,4 @@
 # Auto-generated or test files
 build
 example/*.svg
+example/*.tex

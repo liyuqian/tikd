@@ -12,10 +12,6 @@ const String kStrWatch = 'watch';
 
 const String kStrPositionalName = 'tikz tex or dart file path';
 
-const String kDartSuffix = '.dart';
-const String kTexSuffix = '.tex';
-const String kSvgSuffix = '.svg';
-
 ArgParser buildParser() {
   return ArgParser()
     ..addFlag(
@@ -43,9 +39,8 @@ void printUsage(ArgParser argParser) {
 }
 
 Future<void> tikzToSvg(String texPath) async {
-  final String svgPath =
-      texPath.substring(0, texPath.length - kTexSuffix.length) + kSvgSuffix;
-  await LatexWrapper.fromTikzFile(texPath).toSvg(svgPath);
+  final String svgPath = replaceSuffix(texPath, kTexSuffix, kSvgSuffix);
+  await LatexWrapper.fromTikzFile(texPath).makeSvg(svgPath);
 }
 
 Future<void> dartToSvg(String dartPath) async {

@@ -108,6 +108,15 @@ class InnerSep extends StyleOption {
   String toRaw() => 'inner sep=$sep$unit';
 }
 
+class PredefinedStyle extends StringOption {
+  PredefinedStyle(super.value);
+
+  @override
+  String toRaw() => value;
+}
+
+final helpLinesStyle = PredefinedStyle('help lines');
+
 class CustomStyle extends RawElement {
   CustomStyle(TikzPicture picture, this.name, this.options) {
     picture.addStyle(this);

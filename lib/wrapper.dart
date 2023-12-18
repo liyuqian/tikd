@@ -2,9 +2,21 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 import 'package:process_run/shell.dart';
+import 'package:tikd/base.dart';
 import 'package:tikd/picture.dart';
 
 const String kName = 'tikd';
+
+const String kDartSuffix = '.dart';
+const String kTexSuffix = '.tex';
+const String kSvgSuffix = '.svg';
+
+String replaceSuffix(path, String fromSuffix, String toSuffix) {
+  if (!path.endsWith(fromSuffix)) {
+    throw ArgumentError('Path $path does not end with $fromSuffix');
+  }
+  return path.substring(0, path.length - fromSuffix.length) + toSuffix;
+}
 
 class LatexWrapper {
   static const String kHeader = r'''
@@ -29,12 +41,12 @@ class LatexWrapper {
   LatexWrapper.fromPicture(TikzPicture picture) {
     _lines = [
       TikzPicture.kBegin,
-      ...picture.buildLines(),
+      ...indent(picture.buildLines()),
       TikzPicture.kEnd,
     ];
   }
 
-  Future<void> toSvg(String svgPath) async {
+  Future<void> makeSvg(String svgPath) async {
     final dir = Directory.systemTemp.createTempSync(kName);
     final texFile = File('${dir.path}/tmp.tex');
     texFile.writeAsStringSync([
@@ -44,11 +56,15 @@ class LatexWrapper {
     ].join('\n'));
     final shell = Shell(workingDirectory: dir.path);
     final kSvgName = 'tmp.svg';
-    await shell.run('pdflatex tmp.tex');
+    final kTexName = 'tmp.tex';
+    await shell.run('pdflatex $kTexName');
     await shell.run('pdf2svg tmp.pdf $kSvgName');
-    final tmpPath = p.join(dir.path, kSvgName);
-    File(tmpPath).renameSync(svgPath);
-    print('Generated $svgPath');
+    final tmpSvg = p.join(dir.path, kSvgName);
+    final tmpTex = p.join(dir.path, kTexName);
+    final texPath = replaceSuffix(svgPath, kSvgSuffix, kTexSuffix);
+    File(tmpSvg).renameSync(svgPath);
+    File(tmpTex).renameSync(texPath);
+    print('Generated $svgPath (using $texPath)');
     dir.deleteSync(recursive: true);
   }
 

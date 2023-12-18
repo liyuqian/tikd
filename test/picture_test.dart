@@ -1,19 +1,21 @@
 import 'package:test/test.dart';
+import 'package:tikd/base.dart';
 import 'package:tikd/picture.dart';
 import 'package:tikd/style.dart';
+import 'package:tikd/wrapper.dart';
 
 void main() {
   test('Circle handles empty units', () {
-    expect(Circle(x: 0, y: 0, r: 1).toRaw(),
+    expect(Circle(center: xy(0, 0), radius: 1).toRaw(),
         equals('(0.0, 0.0) circle [radius=1.0]'));
   });
 
   test('Circle handles pt units', () {
-    expect(Circle(x: 0, y: 0, r: 1, unit: 'pt').toRaw(),
+    expect(Circle(center: xy(0, 0), radius: 1, unit: 'pt').toRaw(),
         equals('(0.0pt, 0.0pt) circle [radius=1.0pt]'));
   });
 
-  test('Karl\'s example works', () {
+  test('Karl\'s example works', () async {
     final picture = TikzPicture(options: [Scale(3), LineCap.round()]);
 
     final axesStyle = CustomStyle(picture, 'axes', []);
@@ -35,8 +37,14 @@ void main() {
     final tanColor = CustomColor(picture, 'tancolor', darkOrange);
     final cosColor = CustomColor(picture, 'coscolor', Color.blue);
 
+    final grid = Grid(xy(-1.4, -1.4), xy(1.4, 1.4), step: 0.5);
+    picture.draw(grid, options: [helpLinesStyle]);
+
     // Uncomment to update the expected lines.
-    // print(picture.lines.join('\n'));
+    // print(picture.buildLines().join('\n'));
+
+    // Uncomment to generate the SVG.
+    // await LatexWrapper.fromPicture(picture).makeSvg('/tmp/picture_test.svg');
 
     expect(picture.buildLines().join('\n'), equals(r'''
 [
@@ -49,6 +57,7 @@ void main() {
 \colorlet{anglecolor}{green!50!black}
 \colorlet{sincolor}{red}
 \colorlet{tancolor}{orange!80!black}
-\colorlet{coscolor}{blue}'''));
+\colorlet{coscolor}{blue}
+\draw[help lines] (-1.4, -1.4) grid [step=0.5] (1.4, 1.4);'''));
   });
 }

@@ -8,8 +8,12 @@ class TikzPicture {
   static const String kBegin = r'\begin{tikzpicture}';
   static const String kEnd = r'\end{tikzpicture}';
 
-  void draw(RawElement element) => drawRaw(element.toRaw());
-  void drawRaw(String raw) => _lines.add(r'\draw ' '$raw;');
+  void draw(RawElement element, {List<StyleOption> options = const []}) =>
+      drawRaw(element.toRaw(), options: options);
+  void drawRaw(String raw, {List<StyleOption> options = const []}) {
+    final String opt = options.isEmpty ? '' : '[${options.join(', ')}]';
+    _lines.add('\\draw$opt $raw;');
+  }
 
   void addRaw(String raw) => _lines.add(raw);
   void addStyle(CustomStyle style) => _customStyles.add(style);
@@ -31,44 +35,39 @@ class TikzPicture {
 abstract class UnitElement implements RawElement {
   /// The default empty unit is cm in TIKZ.
   UnitElement({this.unit = ""});
-
   final String unit;
 
-  String uu(double v) => '$v$unit';
+  String uv(double v) => '$v$unit';
+  String uxy(Vector2 xy) => '(${uv(xy.x)}, ${uv(xy.y)})';
 }
 
 class Lines extends UnitElement {
-  /// [coordinates] is n x 2: a list of n number of (x, y).
-  Lines(List<List<double>> coordinates, {super.unit = ""})
-      : points = coordinates.map((c) => Vector2(c[0], c[1])).toList();
-
+  Lines(this.points, {super.unit = ""});
   final List<Vector2> points;
 
   @override
   String toRaw() {
-    return points.map((p) => '(${uu(p.x)}, ${uu(p.y)})').join(' -- ');
+    return points.map((p) => uxy(p)).join(' -- ');
   }
 }
 
-class Line extends Lines {
-  Line(List<double> p1, List<double> p2, {String unit = ""})
-      : super([p1, p2], unit: unit);
-}
-
 class Circle extends UnitElement {
-  Circle({
-    required double x,
-    required double y,
-    required double r,
-    super.unit = "",
-  })  : center = Vector2(x, y),
-        radius = r;
-
+  Circle({required this.center, required this.radius, super.unit = ""});
   final Vector2 center;
   final double radius;
 
   @override
   String toRaw() {
-    return '(${uu(center.x)}, ${uu(center.y)}) circle [radius=${uu(radius)}]';
+    return '${uxy(center)} circle [radius=${uv(radius)}]';
   }
+}
+
+class Grid extends UnitElement {
+  Grid(this.from, this.to, {required this.step, super.unit = ""});
+  final Vector2 from;
+  final Vector2 to;
+  final double step;
+
+  @override
+  String toRaw() => '${uxy(from)} grid [step=${uv(step)}] ${uxy(to)}';
 }
