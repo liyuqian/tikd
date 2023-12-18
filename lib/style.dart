@@ -1,4 +1,5 @@
 import 'package:tikd/base.dart';
+import 'package:tikd/picture.dart';
 
 abstract class StyleOption extends RawElement {}
 
@@ -38,7 +39,13 @@ class Corners extends StringOption {
   String toRaw() => '$value corners';
 }
 
-abstract class Color extends StyleOption {}
+abstract class Color extends StyleOption {
+  static final SingleColor red = ColorName.red().color;
+  static final SingleColor green = ColorName.green().color;
+  static final SingleColor blue = ColorName.blue().color;
+  static final SingleColor orange = ColorName.orange().color;
+  static final SingleColor black = ColorName.black().color;
+}
 
 class ColorName extends StringOption {
   ColorName.red() : super('red');
@@ -47,8 +54,7 @@ class ColorName extends StringOption {
   ColorName.orange() : super('orange');
   ColorName.black() : super('black');
 
-  Color get color => SingleColor(this);
-  Color percent(int p) => SingleColor(this, percent: p);
+  SingleColor get color => SingleColor(this);
 
   @override
   String toRaw() => value;
@@ -59,6 +65,9 @@ class SingleColor extends Color {
   final ColorName name;
   final int? percent;
 
+  SingleColor operator %(int percent) => SingleColor(name, percent: percent);
+  MixedColor operator +(SingleColor other) => MixedColor([this, other]);
+
   @override
   String toRaw() => '$name${percent == null ? '' : '!$percent'}';
 }
@@ -66,9 +75,20 @@ class SingleColor extends Color {
 class MixedColor extends Color {
   MixedColor(this.colors);
   final List<SingleColor> colors;
+  MixedColor operator +(SingleColor other) => MixedColor([...colors, other]);
 
   @override
   String toRaw() => colors.join('!');
+}
+
+class CustomColor extends Color {
+  CustomColor(TikzPicture picture, this.name, Color color) {
+    picture.addRaw('\\colorlet{$name}{$color}');
+  }
+  final String name;
+
+  @override
+  String toRaw() => name;
 }
 
 class Fill extends StyleOption {
@@ -88,8 +108,10 @@ class InnerSep extends StyleOption {
   String toRaw() => 'inner sep=$sep$unit';
 }
 
-class Style implements RawElement {
-  Style(this.name, this.options);
+class CustomStyle extends RawElement {
+  CustomStyle(TikzPicture picture, this.name, this.options) {
+    picture.addStyle(this);
+  }
   final String name;
   final List<StyleOption> options;
 

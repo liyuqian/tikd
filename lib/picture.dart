@@ -3,28 +3,28 @@ import 'package:tikd/style.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class TikzPicture {
-  TikzPicture({this.options = const [], this.namedStyles = const []}) {
-    lines
-      ..add('[')
-      ..addAll(options.map((o) => '  ${o.toRaw()},'))
-      ..addAll(namedStyles.map((s) => '  ${s.toRaw()},'))
-      ..add(']');
-  }
+  TikzPicture({List<StyleOption> options = const []}) : _options = options;
 
   static const String kBegin = r'\begin{tikzpicture}';
   static const String kEnd = r'\end{tikzpicture}';
 
-  void drawRaw(String raw) {
-    lines.add(r'\draw ' '$raw;');
-  }
+  void draw(RawElement element) => drawRaw(element.toRaw());
+  void drawRaw(String raw) => _lines.add(r'\draw ' '$raw;');
 
-  void draw(RawElement element) {
-    drawRaw(element.toRaw());
-  }
+  void addRaw(String raw) => _lines.add(raw);
+  void addStyle(CustomStyle style) => _customStyles.add(style);
 
-  final List<StyleOption> options;
-  final List<Style> namedStyles;
-  final List<String> lines = [];
+  List<String> buildLines() => [
+        '[',
+        ..._options.map((o) => '  ${o.toRaw()},'),
+        ..._customStyles.map((s) => '  ${s.toRaw()},'),
+        ']',
+        ..._lines,
+      ];
+
+  final List<StyleOption> _options;
+  final List<CustomStyle> _customStyles = [];
+  final List<String> _lines = [];
 }
 
 /// Element with uniform units.

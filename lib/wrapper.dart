@@ -29,7 +29,7 @@ class LatexWrapper {
   LatexWrapper.fromPicture(TikzPicture picture) {
     _lines = [
       TikzPicture.kBegin,
-      ...picture.lines,
+      ...picture.buildLines(),
       TikzPicture.kEnd,
     ];
   }
