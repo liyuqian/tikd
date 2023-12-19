@@ -40,9 +40,9 @@ class LatexWrapper {
 
   LatexWrapper.fromPicture(TikzPicture picture) {
     _lines = [
-      TikzPicture.kBegin,
+      picture.begin,
       ...indent(picture.buildLines()),
-      TikzPicture.kEnd,
+      picture.end,
     ];
   }
 

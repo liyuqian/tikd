@@ -1,5 +1,6 @@
 import 'package:tikd/base.dart';
 import 'package:tikd/picture.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 abstract class StyleOption extends RawElement {}
 
@@ -7,6 +8,16 @@ abstract class StringOption extends StyleOption {
   StringOption(this.value);
   final String value;
 }
+
+class PredefinedStyle extends StringOption {
+  PredefinedStyle(super.value);
+
+  @override
+  String toRaw() => value;
+}
+
+final helpLinesStyle = PredefinedStyle('help lines');
+final singleArrowStyle = PredefinedStyle('->');
 
 class Thickness extends StringOption {
   Thickness.veryThick() : super('very thick');
@@ -16,12 +27,25 @@ class Thickness extends StringOption {
   String toRaw() => value;
 }
 
-class Scale extends StyleOption {
-  Scale(this.scale);
-  final double scale;
+abstract class DoubleOption extends StyleOption {
+  DoubleOption(this.value);
+  final double value;
+}
+
+class Scale extends DoubleOption {
+  Scale(super.value);
 
   @override
-  String toRaw() => 'scale=$scale';
+  String toRaw() => 'scale=$value';
+}
+
+class Shift extends StyleOption {
+  Shift(this.v, {this.unit = ''});
+  final Vector2 v;
+  final String unit;
+
+  @override
+  String toRaw() => 'shift={(${v.x}$unit, ${v.y}$unit)}';
 }
 
 class LineCap extends StringOption {
@@ -45,6 +69,7 @@ abstract class Color extends StyleOption {
   static final SingleColor blue = ColorName.blue().color;
   static final SingleColor orange = ColorName.orange().color;
   static final SingleColor black = ColorName.black().color;
+  static final SingleColor white = ColorName.white().color;
 }
 
 class ColorName extends StringOption {
@@ -53,6 +78,7 @@ class ColorName extends StringOption {
   ColorName.blue() : super('blue');
   ColorName.orange() : super('orange');
   ColorName.black() : super('black');
+  ColorName.white() : super('white');
 
   SingleColor get color => SingleColor(this);
 
@@ -108,22 +134,14 @@ class InnerSep extends StyleOption {
   String toRaw() => 'inner sep=$sep$unit';
 }
 
-class PredefinedStyle extends StringOption {
-  PredefinedStyle(super.value);
-
-  @override
-  String toRaw() => value;
-}
-
-final helpLinesStyle = PredefinedStyle('help lines');
-
-class CustomStyle extends RawElement {
+class CustomStyle extends StyleOption {
   CustomStyle(TikzPicture picture, this.name, this.options) {
     picture.addStyle(this);
   }
   final String name;
   final List<StyleOption> options;
+  String get definition => '$name/.style={${options.join(', ')}}';
 
   @override
-  String toRaw() => '$name/.style={${options.join(', ')}}';
+  String toRaw() => name;
 }

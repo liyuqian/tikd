@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 import 'package:tikd/base.dart';
+import 'package:tikd/geometry.dart';
 
 import 'package:tikd/picture.dart';
 import 'package:tikd/wrapper.dart';
