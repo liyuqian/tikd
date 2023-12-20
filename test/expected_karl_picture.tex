@@ -1,0 +1,28 @@
+[
+  scale=3.0,
+  line cap=round,
+  axes/.style={},
+  important line/.style={very thick},
+  information text/.style={rounded corners, fill=red!10, inner sep=1.0ex},
+]
+\colorlet{anglecolor}{green!50!black}
+\colorlet{sincolor}{red}
+\colorlet{tancolor}{orange!80!black}
+\colorlet{coscolor}{blue}
+\draw[help lines]  (-1.4, -1.4) grid[step={(0.5, 0.5)}] (1.4, 1.4);
+\draw  (0.0, 0.0) circle[x radius=1.0, y radius=1.0];
+\begin{scope}
+  [
+    axes,
+  ]
+  \draw[->]  (-1.5, 0.0) -- (1.5, 0.0) node[right] {$x$} coordinate(x axis);
+  \draw[->]  (0.0, -1.5) -- (0.0, 1.5) node[above] {$y$} coordinate(y axis);
+  \draw[shift={(-1.0cm, 0.0cm)}]  (0.0pt, 1.0pt) -- (0.0pt, -1.0pt) node[below, fill=white] {$-1.0$};
+  \draw[shift={(-0.5cm, 0.0cm)}]  (0.0pt, 1.0pt) -- (0.0pt, -1.0pt) node[below, fill=white] {$-0.5$};
+  \draw[shift={(1.0cm, 0.0cm)}]  (0.0pt, 1.0pt) -- (0.0pt, -1.0pt) node[below, fill=white] {$1.0$};
+  \draw[shift={(0.0cm, -1.0cm)}]  (1.0pt, 0.0pt) -- (-1.0pt, 0.0pt) node[left, fill=white] {$-1.0$};
+  \draw[shift={(0.0cm, -0.5cm)}]  (1.0pt, 0.0pt) -- (-1.0pt, 0.0pt) node[left, fill=white] {$-0.5$};
+  \draw[shift={(0.0cm, 0.5cm)}]  (1.0pt, 0.0pt) -- (-1.0pt, 0.0pt) node[left, fill=white] {$0.5$};
+  \draw[shift={(0.0cm, 1.0cm)}]  (1.0pt, 0.0pt) -- (-1.0pt, 0.0pt) node[left, fill=white] {$1.0$};
+\end{scope}
+\filldraw[fill=green!20, draw=anglecolor]  (0.0, 0.0) -- (3.0mm, 0.0mm) arc[x radius=3.0mm, y radius=3.0mm, start angle=0.0, end angle=30.0];

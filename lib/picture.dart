@@ -26,11 +26,14 @@ abstract class Section extends RawElement {
   String get end;
 
   void draw(RawElement element, {List<StyleOption> options = const []}) =>
-      drawRaw(element.toRaw(), options: options);
-  void drawRaw(String raw, {List<StyleOption> options = const []}) {
-    final String opt = options.isEmpty ? '' : '[${options.join(', ')}]';
-    _elements.add(RawString('\\draw$opt $raw;'));
-  }
+      _paint(r'\draw', element.toRaw(), options);
+  void fill(RawElement element, {List<StyleOption> options = const []}) =>
+      _paint(r'\fill', element.toRaw(), options);
+  void filldraw(RawElement element, {List<StyleOption> options = const []}) =>
+      _paint(r'\filldraw', element.toRaw(), options);
+
+  void _paint(String command, String raw, List<StyleOption> options) =>
+      _elements.add(RawString('$command${joinOptions(options)} $raw;'));
 
   void addRaw(String raw) => _elements.add(RawString(raw));
   void addStyle(CustomStyle style) => _customStyles.add(style);

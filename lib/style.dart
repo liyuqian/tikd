@@ -1,23 +1,22 @@
 import 'package:tikd/base.dart';
+import 'package:tikd/geometry.dart';
 import 'package:tikd/picture.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 abstract class StyleOption extends RawElement {}
 
-abstract class StringOption extends StyleOption {
+String joinOptions(List<StyleOption> options) =>
+    options.isEmpty ? '' : '[${options.join(', ')}]';
+
+class StringOption extends StyleOption {
   StringOption(this.value);
   final String value;
-}
-
-class PredefinedStyle extends StringOption {
-  PredefinedStyle(super.value);
 
   @override
   String toRaw() => value;
 }
 
-final helpLinesStyle = PredefinedStyle('help lines');
-final singleArrowStyle = PredefinedStyle('->');
+final helpLinesStyle = StringOption('help lines');
+final singleArrowStyle = StringOption('->');
 
 class Thickness extends StringOption {
   Thickness.veryThick() : super('very thick');
@@ -40,12 +39,11 @@ class Scale extends DoubleOption {
 }
 
 class Shift extends StyleOption {
-  Shift(this.v, {this.unit = ''});
-  final Vector2 v;
-  final String unit;
+  Shift(this.xy);
+  final XY xy;
 
   @override
-  String toRaw() => 'shift={(${v.x}$unit, ${v.y}$unit)}';
+  String toRaw() => 'shift={$xy}';
 }
 
 class LineCap extends StringOption {
@@ -123,6 +121,14 @@ class Fill extends StyleOption {
 
   @override
   String toRaw() => 'fill=$color';
+}
+
+class Draw extends StyleOption {
+  Draw(this.color);
+  final Color color;
+
+  @override
+  String toRaw() => 'draw=$color';
 }
 
 class InnerSep extends StyleOption {

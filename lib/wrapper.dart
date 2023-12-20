@@ -55,6 +55,7 @@ class LatexWrapper {
       kFooter,
     ].join('\n'));
     final shell = Shell(workingDirectory: dir.path);
+    print('Working in: ${dir.path}');
     final kSvgName = 'tmp.svg';
     final kTexName = 'tmp.tex';
     await shell.run('pdflatex $kTexName');

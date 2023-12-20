@@ -1,7 +1,5 @@
-import 'package:vector_math/vector_math_64.dart';
-
-Vector2 xy(double x, double y) => Vector2(x, y);
 String str(Object? o) => o == null ? '' : o.toString();
+List<String> lstr(Object? o) => o == null ? [] : [o.toString()];
 
 List<String> indent(List<String> lines) => lines.map((l) => '  $l').toList();
 
