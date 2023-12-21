@@ -10,13 +10,13 @@ import 'package:tikd/wrapper.dart';
 void main() {
   test('Circle handles empty units', () {
     final circle = XY(0, 0) - Circle(1);
-    expect(circle.toRaw(),
+    expect(circle.definition,
         equals(' (0.0, 0.0) circle[x radius=1.0, y radius=1.0]'));
   });
 
   test('Circle handles pt units', () {
     final circle = XY(0, 0) - Circle(1, unit: 'pt');
-    expect(circle.toRaw(),
+    expect(circle.definition,
         equals(' (0.0, 0.0) circle[x radius=1.0pt, y radius=1.0pt]'));
   });
 

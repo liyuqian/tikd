@@ -5,7 +5,7 @@ import 'package:tikd/style.dart';
 
 double toRadian(double degrees) => degrees * (pi / 180);
 
-abstract class Position extends RawElement {
+abstract class Position extends Referable {
   StringPosition horizontalVertical(Position other) =>
       StringPosition('({$reference} -| {${other.reference}})');
   StringPosition verticalHorizontal(Position other) =>
@@ -20,7 +20,7 @@ class StringPosition extends Position {
   final String s;
 
   @override
-  String toRaw() => s;
+  String get definition => s;
 }
 
 class XY extends Position {
@@ -39,10 +39,10 @@ class XY extends Position {
   Path operator -(PathVerb verb) => Path(this) - verb;
 
   @override
-  String toRaw() => '($xu, $yu)';
+  String get definition => '($xu, $yu)';
 }
 
-abstract class PathVerb extends RawElement {
+abstract class PathVerb extends Referable {
   Node? midNode;
   Node? endNode;
   Coordinate? coordinate;
@@ -57,7 +57,7 @@ abstract class PathVerb extends RawElement {
   String get _opt => joinOptions(_allOptions);
 
   @override
-  String toRaw() => [
+  String get definition => [
         '$verb$_opt',
         ...lstr(midNode?.definition),
         ...ends,
@@ -162,7 +162,7 @@ class Circle extends PathVerb {
   String get verb => 'circle';
 }
 
-class Path extends RawElement {
+class Path extends Referable {
   Path(XY start) : _verbs = [MoveTo(start)];
   final List<PathVerb> _verbs;
 
@@ -175,12 +175,12 @@ class Path extends RawElement {
   set coordinate(Coordinate coordinate) => _verbs.last.coordinate = coordinate;
 
   @override
-  String toRaw() => _verbs.join(' ');
+  String get definition => _verbs.join(' ');
 }
 
 enum Placement { above, below, left, right }
 
-class Node extends RawElement {
+class Node extends Referable {
   Node({
     this.place,
     List<StyleOption> options = const [],
@@ -191,7 +191,7 @@ class Node extends RawElement {
   final String content;
 
   @override
-  String toRaw() => 'node[$_allOptions] {$content}';
+  String get definition => 'node[$_allOptions] {$content}';
 
   String get _allOptions => [
         ...place == null ? [] : [place!.name],
@@ -207,5 +207,5 @@ class Coordinate extends Position {
   String get definition => 'coordinate($name)';
 
   @override
-  String toRaw() => name;
+  String get reference => name;
 }

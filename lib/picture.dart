@@ -19,17 +19,17 @@ class Scope extends Section {
   String get end => r'\end{scope}';
 }
 
-abstract class Section extends RawElement {
+abstract class Section extends Referable {
   Section({List<StyleOption> options = const []}) : _options = options;
 
   String get begin;
   String get end;
 
-  void draw(RawElement element, {List<StyleOption> options = const []}) =>
+  void draw(Referable element, {List<StyleOption> options = const []}) =>
       _paint(r'\draw', element.definition, options);
-  void fill(RawElement element, {List<StyleOption> options = const []}) =>
+  void fill(Referable element, {List<StyleOption> options = const []}) =>
       _paint(r'\fill', element.definition, options);
-  void filldraw(RawElement element, {List<StyleOption> options = const []}) =>
+  void filldraw(Referable element, {List<StyleOption> options = const []}) =>
       _paint(r'\filldraw', element.definition, options);
 
   void _paint(String command, String raw, List<StyleOption> options) =>
@@ -44,7 +44,7 @@ abstract class Section extends RawElement {
   List<String> toLines() => [begin, ...indent(buildLines()), end];
 
   @override
-  toRaw() => toLines().join('\n');
+  String get definition => toLines().join('\n');
 
   List<String> buildLines() {
     List<String> lines = [
@@ -61,5 +61,5 @@ abstract class Section extends RawElement {
 
   final List<StyleOption> _options;
   final List<CustomStyle> _customStyles = [];
-  final List<RawElement> _elements = [];
+  final List<Referable> _elements = [];
 }

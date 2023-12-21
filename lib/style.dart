@@ -2,7 +2,7 @@ import 'package:tikd/base.dart';
 import 'package:tikd/geometry.dart';
 import 'package:tikd/picture.dart';
 
-abstract class StyleOption extends RawElement {}
+abstract class StyleOption extends Referable {}
 
 String joinOptions(List<StyleOption> options) =>
     options.isEmpty ? '' : '[${options.join(', ')}]';
@@ -12,7 +12,7 @@ class StringOption extends StyleOption {
   final String value;
 
   @override
-  String toRaw() => value;
+  String get definition => value;
 }
 
 final helpLinesStyle = StringOption('help lines');
@@ -23,7 +23,7 @@ class Thickness extends StringOption {
   Thickness.veryThin() : super('very thin');
 
   @override
-  String toRaw() => value;
+  String get definition => value;
 }
 
 abstract class DoubleOption extends StyleOption {
@@ -37,14 +37,14 @@ class Scale extends DoubleOption {
   Scale(super.value);
 
   @override
-  String toRaw() => 'scale=$value';
+  String get definition => 'scale=$value';
 }
 
 class Left extends DoubleOption {
   Left(super.value, {super.unit = ''});
 
   @override
-  String toRaw() => 'left=$vu';
+  String get definition => 'left=$vu';
 }
 
 class Shift extends StyleOption {
@@ -52,7 +52,7 @@ class Shift extends StyleOption {
   final XY xy;
 
   @override
-  String toRaw() => 'shift={$xy}';
+  String get definition => 'shift={$xy}';
 }
 
 class LineCap extends StringOption {
@@ -60,14 +60,14 @@ class LineCap extends StringOption {
   LineCap.butt() : super('butt');
 
   @override
-  String toRaw() => 'line cap=$value';
+  String get definition => 'line cap=$value';
 }
 
 class Corners extends StringOption {
   Corners.round() : super('rounded');
 
   @override
-  String toRaw() => '$value corners';
+  String get definition => '$value corners';
 }
 
 abstract class Color extends StyleOption {
@@ -95,7 +95,7 @@ class SingleColor extends Color {
   MixedColor operator +(SingleColor other) => MixedColor([this, other]);
 
   @override
-  String toRaw() => '$name${percent == null ? '' : '!$percent'}';
+  String get definition => '$name${percent == null ? '' : '!$percent'}';
 }
 
 class MixedColor extends Color {
@@ -104,7 +104,7 @@ class MixedColor extends Color {
   MixedColor operator +(SingleColor other) => MixedColor([...colors, other]);
 
   @override
-  String toRaw() => colors.join('!');
+  String get definition => colors.join('!');
 }
 
 class CustomColor extends Color {
@@ -118,7 +118,7 @@ class CustomColor extends Color {
   String get definition => '\\colorlet{$name}{$color}';
 
   @override
-  String toRaw() => name;
+  String get reference => name;
 }
 
 class Fill extends StyleOption {
@@ -126,7 +126,7 @@ class Fill extends StyleOption {
   final Color color;
 
   @override
-  String toRaw() => 'fill=$color';
+  String get definition => 'fill=$color';
 }
 
 class Draw extends StyleOption {
@@ -134,7 +134,7 @@ class Draw extends StyleOption {
   final Color color;
 
   @override
-  String toRaw() => 'draw=$color';
+  String get definition => 'draw=$color';
 }
 
 class InnerSep extends StyleOption {
@@ -143,7 +143,7 @@ class InnerSep extends StyleOption {
   final String unit;
 
   @override
-  String toRaw() => 'inner sep=$sep$unit';
+  String get definition => 'inner sep=$sep$unit';
 }
 
 class CustomStyle extends StyleOption {
@@ -157,5 +157,5 @@ class CustomStyle extends StyleOption {
   String get definition => '$name/.style={${options.join(', ')}}';
 
   @override
-  String toRaw() => name;
+  String get reference => name;
 }
