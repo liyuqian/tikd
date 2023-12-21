@@ -14,7 +14,8 @@ abstract class Position extends Referable {
   StringPosition operator ~/(Position other) => horizontalVertical(other);
   StringPosition operator >=(Position other) => verticalHorizontal(other);
 
-  Path operator -(PathVerb verb) => Path(this) - verb;
+  Path operator >>(PathVerb verb) => Path(this) >> verb;
+  Path operator >>>(Position next) => Path(this) >>> next;
 }
 
 class StringPosition extends Position {
@@ -166,10 +167,12 @@ class Path extends Referable {
   Path(Position start) : _verbs = [MoveTo(start)];
   final List<PathVerb> _verbs;
 
-  Path operator -(PathVerb verb) {
+  Path operator >>(PathVerb verb) {
     _verbs.add(verb);
     return this;
   }
+
+  Path operator >>>(Position next) => this >> LineTo(next);
 
   set midNode(Node node) => _verbs.last.midNode = node;
   set endNode(Node node) => _verbs.last.endNode = node;

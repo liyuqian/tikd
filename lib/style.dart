@@ -26,18 +26,23 @@ class Thickness extends StringOption {
   String get definition => value;
 }
 
-abstract class DoubleOption extends StyleOption {
-  DoubleOption(this.value, {this.unit = ''});
+class DoubleOption extends StyleOption {
+  DoubleOption(this.name, this.value, {this.unit = ''});
+  final String name;
   final double value;
   final String unit;
   String get vu => '$value$unit';
+
+  @override
+  String get definition => '$name=$vu';
 }
 
 class Scale extends DoubleOption {
-  Scale(super.value);
+  Scale(double v, {String unit = ''}) : super('scale', v, unit: unit);
+}
 
-  @override
-  String get definition => 'scale=$value';
+class TextWidth extends DoubleOption {
+  TextWidth(double w, {String unit = ''}) : super('text width', w, unit: unit);
 }
 
 class Placement extends StyleOption {
@@ -53,13 +58,6 @@ class Placement extends StyleOption {
 
   @override
   String get definition => '$name${value == null ? '' : '=$value$unit'}';
-}
-
-class Left extends DoubleOption {
-  Left(super.value, {super.unit = ''});
-
-  @override
-  String get definition => 'left=$vu';
 }
 
 class Shift extends StyleOption {
@@ -173,4 +171,16 @@ class CustomStyle extends StyleOption {
 
   @override
   String get reference => name;
+}
+
+class Intersection extends StyleOption {
+  Intersection(this.pathNameA, this.pathNameB, this.byName);
+  final String pathNameA, pathNameB;
+  final String byName;
+
+  StringPosition get position => StringPosition('($byName)');
+
+  @override
+  String get definition =>
+      'name intersections={of=$pathNameA and $pathNameB, by=$byName}';
 }

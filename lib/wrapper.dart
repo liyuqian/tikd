@@ -28,6 +28,8 @@ class LatexWrapper {
 \usepackage{amsmath}
 \usepackage{amssymb}
 
+\usetikzlibrary{intersections}
+
 \begin{document}
 ''';
 

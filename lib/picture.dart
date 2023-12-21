@@ -1,4 +1,5 @@
 import 'package:tikd/base.dart';
+import 'package:tikd/geometry.dart';
 import 'package:tikd/style.dart';
 
 class TikzPicture extends Section {
@@ -26,19 +27,20 @@ abstract class Section extends Referable {
   String get end;
 
   void draw(Referable element, {List<StyleOption> options = const []}) =>
-      _paint(r'\draw', element.definition, options);
+      _add(r'\draw', options, element.definition);
   void fill(Referable element, {List<StyleOption> options = const []}) =>
-      _paint(r'\fill', element.definition, options);
+      _add(r'\fill', options, element.definition);
   void filldraw(Referable element, {List<StyleOption> options = const []}) =>
-      _paint(r'\filldraw', element.definition, options);
-
-  void _paint(String command, String raw, List<StyleOption> options) =>
-      _elements.add(RawString('$command${joinOptions(options)} $raw;'));
+      _add(r'\filldraw', options, element.definition);
+  void namePath(Path p, String name) =>
+      _add(r'\path', [StringOption('name path=$name')], p.definition);
 
   void addRaw(String raw) => _elements.add(RawString(raw));
   void addStyle(CustomStyle style) => _customStyles.add(style);
-
   void addScope(Scope scope) => _elements.add(scope);
+
+  void _add(String command, List<StyleOption> options, String raw) =>
+      _elements.add(RawString('$command${joinOptions(options)} $raw;'));
 
   @override
   List<String> toLines() => [begin, ...indent(buildLines()), end];

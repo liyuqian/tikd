@@ -7,7 +7,6 @@
 ]
 \colorlet{anglecolor}{green!50!black}
 \colorlet{sincolor}{red}
-\colorlet{tancolor}{orange!80!black}
 \colorlet{coscolor}{blue}
 \draw[help lines]  (-1.4, -1.4) grid[step={(0.5, 0.5)}] (1.4, 1.4);
 \draw  (0.0, 0.0) circle[x radius=1.0, y radius=1.0];
@@ -29,3 +28,8 @@
 \draw  (1.9318516525781366mm, 0.5176380902050415mm) node[anglecolor] {$\alpha$};
 \draw[important line, sincolor]  (0.8660254037844387, 0.49999999999999994) -- node[left, fill=white] {$\sin \alpha$} ({(0.8660254037844387, 0.49999999999999994)} |- {x axis});
 \draw[important line, coscolor]  ({(0.8660254037844387, 0.49999999999999994)} |- {x axis}) -- node[below, fill=white] {$\cos \alpha$} (0.0, 0.0);
+\path[name path=upward line]  (1.0, 0.0) -- (1.0, 1.0);
+\path[name path=sloped line]  (0.0, 0.0) -- (1.299038105676658, 0.7499999999999999);
+\draw[name intersections={of=upward line and sloped line, by=t}, very thick, orange]  (1.0, 0.0) -- node[right, fill=white] {$\displaystyle \tan \alpha \color{black}=\frac{{\color{red}\sin \alpha}}{\color{blue}\cos \alpha}$} (t);
+\draw  (0.0, 0.0) -- (t);
+\draw[shift={(1.85, 0.0)}] node[right, text width=6.0cm, information text] {The {\color{anglecolor} angle $\alpha$} is $30^\circ$ in the example ($\pi/6$ in radians). The {\color{sincolor}sine of $\alpha$}, which is the height of the red line, is\[\sin \alpha = 1/2.\]By the Theorem of Pythagoras ...};
