@@ -7,6 +7,22 @@ double toRadian(double degrees) => degrees * (pi / 180);
 
 abstract class Position extends RawElement {
   String get reference => toRaw(); // Can be overriden.
+
+  StringPosition horizontalVertical(Position other) =>
+      StringPosition('({$reference} -| {${other.reference}})');
+  StringPosition verticalHorizontal(Position other) =>
+      StringPosition('({$reference} |- {${other.reference}})');
+
+  StringPosition operator ~/(Position other) => horizontalVertical(other);
+  StringPosition operator >=(Position other) => verticalHorizontal(other);
+}
+
+class StringPosition extends Position {
+  StringPosition(this.s);
+  final String s;
+
+  @override
+  String toRaw() => s;
 }
 
 class XY extends Position {
@@ -29,7 +45,8 @@ class XY extends Position {
 }
 
 abstract class PathVerb extends RawElement {
-  Node? node;
+  Node? midNode;
+  Node? endNode;
   Coordinate? coordinate;
   List<StyleOption> options = [];
 
@@ -42,8 +59,13 @@ abstract class PathVerb extends RawElement {
   String get _opt => joinOptions(_allOptions);
 
   @override
-  String toRaw() =>
-      ['$verb$_opt', ...ends, ...lstr(node), ...lstr(coordinate)].join(' ');
+  String toRaw() => [
+        '$verb$_opt',
+        ...lstr(midNode),
+        ...ends,
+        ...lstr(endNode),
+        ...lstr(coordinate)
+      ].join(' ');
 }
 
 abstract class ToVerb extends PathVerb {
@@ -151,7 +173,7 @@ class Path extends RawElement {
     return this;
   }
 
-  set node(Node node) => _verbs.last.node = node;
+  set node(Node node) => _verbs.last.endNode = node;
   set coordinate(Coordinate coordinate) => _verbs.last.coordinate = coordinate;
 
   @override
@@ -179,10 +201,13 @@ class Node extends RawElement {
       ].join(', ');
 }
 
-class Coordinate extends RawElement {
+class Coordinate extends Position {
   Coordinate(this.name);
   final String name;
 
   @override
   String toRaw() => 'coordinate($name)';
+
+  @override
+  String get reference => name;
 }

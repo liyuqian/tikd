@@ -5,6 +5,7 @@ import 'package:tikd/geometry.dart';
 import 'package:tikd/picture.dart';
 import 'package:tikd/style.dart';
 import 'package:path/path.dart' as p;
+import 'package:tikd/wrapper.dart';
 
 void main() {
   test('Circle handles empty units', () {
@@ -46,12 +47,14 @@ void main() {
 
     picture.draw(XY(0, 0) - Circle(1));
 
+    final xAxisCoordinate = Coordinate('x axis');
+    final yAxisCoordinate = Coordinate('y axis');
     final xAxis = XY(-1.5, 0) - LineTo(XY(1.5, 0))
       ..node = Node(place: Placement.right, content: r'$x$')
-      ..coordinate = Coordinate('x axis');
+      ..coordinate = xAxisCoordinate;
     final yAxis = XY(0, -1.5) - LineTo(XY(0, 1.5))
       ..node = Node(place: Placement.above, content: r'$y$')
-      ..coordinate = Coordinate('y axis');
+      ..coordinate = yAxisCoordinate;
     final axesScope = Scope(options: [axesStyle])
       ..draw(xAxis, options: [singleArrowStyle])
       ..draw(yAxis, options: [singleArrowStyle]);
@@ -76,6 +79,16 @@ void main() {
     final arc = Arc(r: 3, unit: 'mm', startAngle: 0, endAngle: 30);
     picture.filldraw(XY(0, 0) - LineTo(XY(3, 0, unit: 'mm')) - arc,
         options: [Fill(Color.green % 20), Draw(angleColor)]);
+
+    picture.draw(Path(XY.polar(15, 2, unit: 'mm'))
+      ..node = Node(content: r'$\alpha$', options: [angleColor]));
+
+    final sinLineTo = LineTo(XY.polar(30, 1) >= xAxisCoordinate)
+      ..midNode = Node(
+          content: r'$\sin \alpha$',
+          options: [Left(1, unit: 'pt'), Fill(Color.white)]);
+    picture.draw(XY.polar(30, 1) - sinLineTo,
+        options: [importantLineStyle, sinColor]);
 
     // Uncomment to generate the SVG.
     // await LatexWrapper.fromPicture(picture).makeSvg('/tmp/picture_test.svg');

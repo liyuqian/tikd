@@ -27,8 +27,10 @@ class Thickness extends StringOption {
 }
 
 abstract class DoubleOption extends StyleOption {
-  DoubleOption(this.value);
+  DoubleOption(this.value, {this.unit = ''});
   final double value;
+  final String unit;
+  String get vu => '$value$unit';
 }
 
 class Scale extends DoubleOption {
@@ -36,6 +38,13 @@ class Scale extends DoubleOption {
 
   @override
   String toRaw() => 'scale=$value';
+}
+
+class Left extends DoubleOption {
+  Left(super.value, {super.unit = ''});
+
+  @override
+  String toRaw() => 'left=$vu';
 }
 
 class Shift extends StyleOption {
