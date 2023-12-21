@@ -8,9 +8,16 @@ abstract class RawElement {
   String toRaw();
 
   @override
-  String toString() => toRaw();
+  String toString() => reference;
 
-  List<String> toLines() => [toRaw()];
+  // Can be overriden
+  String get reference => toRaw();
+  String get definition => toRaw();
+
+  String get ref => reference;
+  String get def => definition;
+
+  List<String> toLines() => [definition];
 }
 
 class RawString extends RawElement {

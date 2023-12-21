@@ -71,34 +71,27 @@ class Corners extends StringOption {
 }
 
 abstract class Color extends StyleOption {
-  static final SingleColor red = ColorName.red().color;
-  static final SingleColor green = ColorName.green().color;
-  static final SingleColor blue = ColorName.blue().color;
-  static final SingleColor orange = ColorName.orange().color;
-  static final SingleColor black = ColorName.black().color;
-  static final SingleColor white = ColorName.white().color;
-}
-
-class ColorName extends StringOption {
-  ColorName.red() : super('red');
-  ColorName.green() : super('green');
-  ColorName.blue() : super('blue');
-  ColorName.orange() : super('orange');
-  ColorName.black() : super('black');
-  ColorName.white() : super('white');
-
-  SingleColor get color => SingleColor(this);
-
-  @override
-  String toRaw() => value;
+  static final SingleColor red = SingleColor.red();
+  static final SingleColor green = SingleColor.green();
+  static final SingleColor blue = SingleColor.blue();
+  static final SingleColor orange = SingleColor.orange();
+  static final SingleColor black = SingleColor.black();
+  static final SingleColor white = SingleColor.white();
 }
 
 class SingleColor extends Color {
-  SingleColor(this.name, {this.percent});
-  final ColorName name;
+  SingleColor.red() : this._('red');
+  SingleColor.green() : this._('green');
+  SingleColor.blue() : this._('blue');
+  SingleColor.orange() : this._('orange');
+  SingleColor.black() : this._('black');
+  SingleColor.white() : this._('white');
+
+  SingleColor._(this.name, {this.percent});
+  final String name;
   final int? percent;
 
-  SingleColor operator %(int percent) => SingleColor(name, percent: percent);
+  SingleColor operator %(int percent) => SingleColor._(name, percent: percent);
   MixedColor operator +(SingleColor other) => MixedColor([this, other]);
 
   @override
@@ -115,10 +108,14 @@ class MixedColor extends Color {
 }
 
 class CustomColor extends Color {
-  CustomColor(TikzPicture picture, this.name, Color color) {
-    picture.addRaw('\\colorlet{$name}{$color}');
+  CustomColor(TikzPicture picture, this.name, this.color) {
+    picture.addRaw(definition);
   }
   final String name;
+  final Color color;
+
+  @override
+  String get definition => '\\colorlet{$name}{$color}';
 
   @override
   String toRaw() => name;
@@ -155,6 +152,8 @@ class CustomStyle extends StyleOption {
   }
   final String name;
   final List<StyleOption> options;
+
+  @override
   String get definition => '$name/.style={${options.join(', ')}}';
 
   @override

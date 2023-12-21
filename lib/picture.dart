@@ -26,11 +26,11 @@ abstract class Section extends RawElement {
   String get end;
 
   void draw(RawElement element, {List<StyleOption> options = const []}) =>
-      _paint(r'\draw', element.toRaw(), options);
+      _paint(r'\draw', element.definition, options);
   void fill(RawElement element, {List<StyleOption> options = const []}) =>
-      _paint(r'\fill', element.toRaw(), options);
+      _paint(r'\fill', element.definition, options);
   void filldraw(RawElement element, {List<StyleOption> options = const []}) =>
-      _paint(r'\filldraw', element.toRaw(), options);
+      _paint(r'\filldraw', element.definition, options);
 
   void _paint(String command, String raw, List<StyleOption> options) =>
       _elements.add(RawString('$command${joinOptions(options)} $raw;'));
@@ -49,7 +49,7 @@ abstract class Section extends RawElement {
   List<String> buildLines() {
     List<String> lines = [
       '[',
-      ..._options.map((o) => '  ${o.toRaw()},'),
+      ..._options.map((o) => '  ${o.reference},'),
       ..._customStyles.map((s) => '  ${s.definition},'),
       ']',
     ];

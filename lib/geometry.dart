@@ -6,8 +6,6 @@ import 'package:tikd/style.dart';
 double toRadian(double degrees) => degrees * (pi / 180);
 
 abstract class Position extends RawElement {
-  String get reference => toRaw(); // Can be overriden.
-
   StringPosition horizontalVertical(Position other) =>
       StringPosition('({$reference} -| {${other.reference}})');
   StringPosition verticalHorizontal(Position other) =>
@@ -61,10 +59,10 @@ abstract class PathVerb extends RawElement {
   @override
   String toRaw() => [
         '$verb$_opt',
-        ...lstr(midNode),
+        ...lstr(midNode?.definition),
         ...ends,
-        ...lstr(endNode),
-        ...lstr(coordinate)
+        ...lstr(endNode?.definition),
+        ...lstr(coordinate?.definition)
       ].join(' ');
 }
 
@@ -206,8 +204,8 @@ class Coordinate extends Position {
   final String name;
 
   @override
-  String toRaw() => 'coordinate($name)';
+  String get definition => 'coordinate($name)';
 
   @override
-  String get reference => name;
+  String toRaw() => name;
 }
