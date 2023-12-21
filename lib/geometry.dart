@@ -13,6 +13,8 @@ abstract class Position extends Referable {
 
   StringPosition operator ~/(Position other) => horizontalVertical(other);
   StringPosition operator >=(Position other) => verticalHorizontal(other);
+
+  Path operator -(PathVerb verb) => Path(this) - verb;
 }
 
 class StringPosition extends Position {
@@ -35,8 +37,6 @@ class XY extends Position {
 
   String get xu => '$x$unit';
   String get yu => '$y$unit';
-
-  Path operator -(PathVerb verb) => Path(this) - verb;
 
   @override
   String get definition => '($xu, $yu)';
@@ -163,7 +163,7 @@ class Circle extends PathVerb {
 }
 
 class Path extends Referable {
-  Path(XY start) : _verbs = [MoveTo(start)];
+  Path(Position start) : _verbs = [MoveTo(start)];
   final List<PathVerb> _verbs;
 
   Path operator -(PathVerb verb) {
@@ -171,14 +171,13 @@ class Path extends Referable {
     return this;
   }
 
-  set node(Node node) => _verbs.last.endNode = node;
+  set midNode(Node node) => _verbs.last.midNode = node;
+  set endNode(Node node) => _verbs.last.endNode = node;
   set coordinate(Coordinate coordinate) => _verbs.last.coordinate = coordinate;
 
   @override
   String get definition => _verbs.join(' ');
 }
-
-enum Placement { above, below, left, right }
 
 class Node extends Referable {
   Node({

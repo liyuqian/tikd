@@ -40,6 +40,21 @@ class Scale extends DoubleOption {
   String get definition => 'scale=$value';
 }
 
+class Placement extends StyleOption {
+  Placement.above({double? by, String unit = ''}) : this._('above', by, unit);
+  Placement.below({double? by, String unit = ''}) : this._('below', by, unit);
+  Placement.left({double? by, String unit = ''}) : this._('left', by, unit);
+  Placement.right({double? by, String unit = ''}) : this._('right', by, unit);
+
+  Placement._(this.name, this.value, this.unit);
+  final String name;
+  final double? value;
+  final String unit;
+
+  @override
+  String get definition => '$name${value == null ? '' : '=$value$unit'}';
+}
+
 class Left extends DoubleOption {
   Left(super.value, {super.unit = ''});
 

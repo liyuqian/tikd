@@ -50,10 +50,10 @@ void main() {
     final xAxisCoordinate = Coordinate('x axis');
     final yAxisCoordinate = Coordinate('y axis');
     final xAxis = XY(-1.5, 0) - LineTo(XY(1.5, 0))
-      ..node = Node(place: Placement.right, content: r'$x$')
+      ..endNode = Node(place: Placement.right(), content: r'$x$')
       ..coordinate = xAxisCoordinate;
     final yAxis = XY(0, -1.5) - LineTo(XY(0, 1.5))
-      ..node = Node(place: Placement.above, content: r'$y$')
+      ..endNode = Node(place: Placement.above(), content: r'$y$')
       ..coordinate = yAxisCoordinate;
     final axesScope = Scope(options: [axesStyle])
       ..draw(xAxis, options: [singleArrowStyle])
@@ -61,16 +61,16 @@ void main() {
     picture.addScope(axesScope);
     for (final x in <double>[-1, -.5, 1]) {
       final tick = XY(0, 1, unit: 'pt') - LineTo(XY(0, -1, unit: 'pt'))
-        ..node = Node(
-            place: Placement.below,
+        ..endNode = Node(
+            place: Placement.below(),
             options: [Fill(Color.white)],
             content: '\$$x\$');
       axesScope.draw(tick, options: [Shift(XY(x, 0, unit: 'cm'))]);
     }
     for (final y in <double>[-1, -.5, .5, 1]) {
       final tick = XY(1, 0, unit: 'pt') - LineTo(XY(-1, 0, unit: 'pt'))
-        ..node = Node(
-            place: Placement.left,
+        ..endNode = Node(
+            place: Placement.left(),
             options: [Fill(Color.white)],
             content: '\$$y\$');
       axesScope.draw(tick, options: [Shift(XY(0, y, unit: 'cm'))]);
@@ -81,14 +81,23 @@ void main() {
         options: [Fill(Color.green % 20), Draw(angleColor)]);
 
     picture.draw(Path(XY.polar(15, 2, unit: 'mm'))
-      ..node = Node(content: r'$\alpha$', options: [angleColor]));
+      ..endNode = Node(content: r'$\alpha$', options: [angleColor]));
 
-    final sinLineTo = LineTo(XY.polar(30, 1) >= xAxisCoordinate)
-      ..midNode = Node(
-          content: r'$\sin \alpha$',
-          options: [Left(1, unit: 'pt'), Fill(Color.white)]);
-    picture.draw(XY.polar(30, 1) - sinLineTo,
+    picture.draw(
+        XY.polar(30, 1) - LineTo(XY.polar(30, 1) >= xAxisCoordinate)
+          ..midNode = Node(
+              content: r'$\sin \alpha$',
+              place: Placement.left(by: 1, unit: 'pt'),
+              options: [Fill(Color.white)]),
         options: [importantLineStyle, sinColor]);
+
+    picture.draw(
+        (XY.polar(30, 1) >= xAxisCoordinate) - LineTo(XY(0, 0))
+          ..midNode = Node(
+              content: r'$\cos \alpha$',
+              place: Placement.below(by: 1, unit: 'pt'),
+              options: [Fill(Color.white)]),
+        options: [importantLineStyle, cosColor]);
 
     // Uncomment to generate the SVG.
     // await LatexWrapper.fromPicture(picture).makeSvg('/tmp/picture_test.svg');
