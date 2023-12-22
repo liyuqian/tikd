@@ -1,9 +1,9 @@
 import 'package:tikd/base.dart';
-import 'package:tikd/geometry.dart';
+import 'package:tikd/path.dart';
 import 'package:tikd/style.dart';
 
-class TikzPicture extends Section {
-  TikzPicture({List<StyleOption> options = const []}) : super(options: options);
+class Picture extends Section {
+  Picture({List<StyleOption> options = const []}) : super(options: options);
 
   @override
   String get begin => r'\begin{tikzpicture}';

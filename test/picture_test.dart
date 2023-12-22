@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:tikd/geometry.dart';
+import 'package:tikd/path.dart';
 import 'package:path/path.dart' as p;
 
 import '../example/karl.dart' as karl;

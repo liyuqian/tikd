@@ -40,7 +40,7 @@ class LatexWrapper {
     _lines = File(path).readAsLinesSync();
   }
 
-  LatexWrapper.fromPicture(TikzPicture picture) {
+  LatexWrapper.fromPicture(Picture picture) {
     _lines = [
       picture.begin,
       ...indent(picture.buildLines()),

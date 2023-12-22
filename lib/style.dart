@@ -1,5 +1,5 @@
 import 'package:tikd/base.dart';
-import 'package:tikd/geometry.dart';
+import 'package:tikd/path.dart';
 import 'package:tikd/picture.dart';
 
 abstract class StyleOption extends Referable {}
@@ -121,7 +121,7 @@ class MixedColor extends Color {
 }
 
 class CustomColor extends Color {
-  CustomColor(TikzPicture picture, this.name, this.color) {
+  CustomColor(Picture picture, this.name, this.color) {
     picture.addRaw(definition);
   }
   final String name;
@@ -160,7 +160,7 @@ class InnerSep extends StyleOption {
 }
 
 class CustomStyle extends StyleOption {
-  CustomStyle(TikzPicture picture, this.name, this.options) {
+  CustomStyle(Picture picture, this.name, this.options) {
     picture.addStyle(this);
   }
   final String name;

@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:tikd/geometry.dart';
+import 'package:tikd/path.dart';
 import 'package:tikd/picture.dart';
 import 'package:tikd/style.dart';
 import 'package:tikd/wrapper.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-TikzPicture buildPicture() {
-  final picture = TikzPicture(options: [Scale(3), LineCap.round()]);
+Picture buildPicture() {
+  final picture = Picture(options: [Scale(3), LineCap.round()]);
   buildAxis(picture);
   buildPlot(picture);
   buildText(picture);
@@ -22,7 +22,7 @@ void main() {
 
 String $(String s) => '\$$s\$';
 
-void buildAxis(TikzPicture picture) {
+void buildAxis(Picture picture) {
   final xAxis = XY(-1.5, 0) >>> XY(1.5, 0)
     ..endNode = Node(r'$x$', place: Placement.right());
   final yAxis = XY(0, -1.5) >>> XY(0, 1.5)
@@ -51,7 +51,7 @@ void buildAxis(TikzPicture picture) {
   }
 }
 
-void buildPlot(TikzPicture picture) {
+void buildPlot(Picture picture) {
   final sinColor = CustomColor(picture, 'sincolor', Color.red);
   final angleColor =
       CustomColor(picture, 'anglecolor', Color.green % 50 + Color.black);
@@ -79,7 +79,7 @@ void buildPlot(TikzPicture picture) {
       ..endNode = Node(r'$\alpha$', options: [angleColor]));
 }
 
-void buildText(TikzPicture picture) {
+void buildText(Picture picture) {
   final informationTextStyle = CustomStyle(picture, 'information text',
       [Corners.rounded(), Fill(Color.red % 10), InnerSep(1, unit: 'ex')]);
   final textLines = [

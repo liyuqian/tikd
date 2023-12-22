@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:tikd/geometry.dart';
+import 'package:tikd/path.dart';
 
 import 'package:tikd/picture.dart';
 import 'package:tikd/style.dart';
 import 'package:tikd/wrapper.dart';
 
-TikzPicture buildPicture() {
-  final picture = TikzPicture(options: [Scale(3), LineCap.round()]);
+Picture buildPicture() {
+  final picture = Picture(options: [Scale(3), LineCap.round()]);
 
   final axesStyle = CustomStyle(picture, 'axes', []);
   final importantLineStyle = CustomStyle(
