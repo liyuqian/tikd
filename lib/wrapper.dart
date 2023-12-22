@@ -71,5 +71,9 @@ class LatexWrapper {
     dir.deleteSync(recursive: true);
   }
 
+  Future<void> makeSvgFromDart(String dartPath) async {
+    await makeSvg(replaceSuffix(dartPath, kDartSuffix, kSvgSuffix));
+  }
+
   List<String> _lines = [];
 }

@@ -5,7 +5,6 @@ import 'package:tikd/geometry.dart';
 import 'package:tikd/picture.dart';
 import 'package:tikd/style.dart';
 import 'package:tikd/wrapper.dart';
-import 'package:path/path.dart' as p;
 import 'package:vector_math/vector_math_64.dart';
 
 TikzPicture buildPicture() {
@@ -18,8 +17,7 @@ TikzPicture buildPicture() {
 
 void main() {
   final picture = buildPicture();
-  final svgPath = p.join(p.dirname(Platform.script.toFilePath()), 'karl.svg');
-  LatexWrapper.fromPicture(picture).makeSvg(svgPath);
+  LatexWrapper.fromPicture(picture).makeSvgFromDart(Platform.script.path);
 }
 
 String $(String s) => '\$$s\$';
