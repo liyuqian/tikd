@@ -32,6 +32,9 @@ TikzPicture buildPicture() {
 
   picture.draw(XY(0, 0) >> Circle(1));
 
+  String fraction(double v) =>
+      v.abs() == 0.5 ? '${v < 0 ? '-' : ''}\\frac{1}{2}' : '${v.round()}';
+
   final xAxisCoordinate = Coordinate('x axis');
   final yAxisCoordinate = Coordinate('y axis');
   final xAxis = XY(-1.5, 0) >>> XY(1.5, 0)
@@ -49,7 +52,7 @@ TikzPicture buildPicture() {
       ..endNode = Node(
           place: Placement.below(),
           options: [Fill(Color.white)],
-          content: '\$$x\$');
+          content: '\$${fraction(x)}\$');
     axesScope.draw(tick, options: [Shift(XY(x, 0, unit: 'cm'))]);
   }
   for (final y in <double>[-1, -.5, .5, 1]) {
@@ -57,7 +60,7 @@ TikzPicture buildPicture() {
       ..endNode = Node(
           place: Placement.left(),
           options: [Fill(Color.white)],
-          content: '\$$y\$');
+          content: '\$${fraction(y)}\$');
     axesScope.draw(tick, options: [Shift(XY(0, y, unit: 'cm'))]);
   }
 
