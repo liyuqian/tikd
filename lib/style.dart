@@ -77,7 +77,7 @@ class LineCap extends StringOption {
 }
 
 class Corners extends StringOption {
-  Corners.round() : super('rounded');
+  Corners.rounded() : super('rounded');
 
   @override
   String get definition => '$value corners';

@@ -19,7 +19,7 @@ TikzPicture buildPicture() {
   final informationTextStyle = CustomStyle(
     picture,
     'information text',
-    [Corners.round(), Fill(Color.red % 10), InnerSep(1, unit: 'ex')],
+    [Corners.rounded(), Fill(Color.red % 10), InnerSep(1, unit: 'ex')],
   );
 
   final darkGreen = Color.green % 50 + Color.black;
@@ -38,10 +38,10 @@ TikzPicture buildPicture() {
   final xAxisCoordinate = Coordinate('x axis');
   final yAxisCoordinate = Coordinate('y axis');
   final xAxis = XY(-1.5, 0) >>> XY(1.5, 0)
-    ..endNode = Node(place: Placement.right(), content: r'$x$')
+    ..endNode = Node(r'$x$', place: Placement.right())
     ..coordinate = xAxisCoordinate;
   final yAxis = XY(0, -1.5) >>> XY(0, 1.5)
-    ..endNode = Node(place: Placement.above(), content: r'$y$')
+    ..endNode = Node(r'$y$', place: Placement.above())
     ..coordinate = yAxisCoordinate;
   final axesScope = Scope(options: [axesStyle])
     ..draw(xAxis, options: [singleArrowStyle])
@@ -49,40 +49,34 @@ TikzPicture buildPicture() {
   picture.addScope(axesScope);
   for (final x in <double>[-1, -.5, 1]) {
     final tick = XY(0, 1, unit: 'pt') >>> XY(0, -1, unit: 'pt')
-      ..endNode = Node(
-          place: Placement.below(),
-          options: [Fill(Color.white)],
-          content: '\$${fraction(x)}\$');
+      ..endNode = Node('\$${fraction(x)}\$',
+          place: Placement.below(), options: [Fill(Color.white)]);
     axesScope.draw(tick, options: [Shift(XY(x, 0, unit: 'cm'))]);
   }
   for (final y in <double>[-1, -.5, .5, 1]) {
     final tick = XY(1, 0, unit: 'pt') >>> XY(-1, 0, unit: 'pt')
-      ..endNode = Node(
-          place: Placement.left(),
-          options: [Fill(Color.white)],
-          content: '\$${fraction(y)}\$');
+      ..endNode = Node('\$${fraction(y)}\$',
+          place: Placement.left(), options: [Fill(Color.white)]);
     axesScope.draw(tick, options: [Shift(XY(0, y, unit: 'cm'))]);
   }
 
-  final arc = Arc(r: 3, unit: 'mm', startAngle: 0, endAngle: 30);
+  final arc = Arc(r: 3, unit: 'mm', start: 0, end: 30);
   picture.filldraw(XY(0, 0) >>> XY(3, 0, unit: 'mm') >> arc,
       options: [Fill(Color.green % 20), Draw(angleColor)]);
 
   picture.draw(Path(XY.polar(15, 2, unit: 'mm'))
-    ..endNode = Node(content: r'$\alpha$', options: [angleColor]));
+    ..endNode = Node(r'$\alpha$', options: [angleColor]));
 
   picture.draw(
       XY.polar(30, 1) >>> (XY.polar(30, 1) >= xAxisCoordinate)
-        ..midNode = Node(
-            content: r'$\sin \alpha$',
+        ..midNode = Node(r'$\sin \alpha$',
             place: Placement.left(by: 1, unit: 'pt'),
             options: [Fill(Color.white)]),
       options: [importantLineStyle, sinColor]);
 
   picture.draw(
       (XY.polar(30, 1) >= xAxisCoordinate) >>> XY(0, 0)
-        ..midNode = Node(
-            content: r'$\cos \alpha$',
+        ..midNode = Node(r'$\cos \alpha$',
             place: Placement.below(by: 1, unit: 'pt'),
             options: [Fill(Color.white)]),
       options: [importantLineStyle, cosColor]);
@@ -95,8 +89,8 @@ TikzPicture buildPicture() {
   picture.draw(
       XY(1, 0) >>> intersection.position
         ..midNode = Node(
-            content: r'$\displaystyle \tan \alpha \color{black}='
-                r'\frac{{\color{red}\sin \alpha}}{\color{blue}\cos \alpha}$',
+            r'$\displaystyle \tan \alpha \color{black}='
+            r'\frac{{\color{red}\sin \alpha}}{\color{blue}\cos \alpha}$',
             place: Placement.right(by: 1, unit: 'pt'),
             options: [Fill(Color.white)]),
       options: [intersection, Thickness.veryThick(), Color.orange]);
@@ -105,16 +99,15 @@ TikzPicture buildPicture() {
 
   picture.draw(
       Node(
+          r'The {\color{anglecolor} angle $\alpha$} is $30^\circ$ in the '
+          r'example ($\pi/6$ in radians). The {\color{sincolor}sine of '
+          r'$\alpha$}, which is the height of the red line, is'
+          r'\['
+          r'\sin \alpha = 1/2.'
+          r'\]'
+          r'By the Theorem of Pythagoras ...',
           place: Placement.right(),
-          options: [TextWidth(6, unit: 'cm'), informationTextStyle],
-          content:
-              r'The {\color{anglecolor} angle $\alpha$} is $30^\circ$ in the '
-              r'example ($\pi/6$ in radians). The {\color{sincolor}sine of '
-              r'$\alpha$}, which is the height of the red line, is'
-              r'\['
-              r'\sin \alpha = 1/2.'
-              r'\]'
-              r'By the Theorem of Pythagoras ...'),
+          options: [TextWidth(6, unit: 'cm'), informationTextStyle]),
       options: [Shift(XY(1.85, 0))]);
 
   return picture;

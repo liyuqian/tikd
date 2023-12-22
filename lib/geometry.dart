@@ -29,6 +29,8 @@ class StringPosition extends Position {
 class XY extends Position {
   XY(this.x, this.y, {this.unit = ''});
   XY.xx(double x, {String unit = ''}) : this(x, x, unit: unit);
+  XY.x(double x, {String unit = ''}) : this(x, 0, unit: unit);
+  XY.y(double y, {String unit = ''}) : this(0, y, unit: unit);
   XY.polar(double degrees, double r, {this.unit = ''})
       : x = r * cos(toRadian(degrees)),
         y = r * sin(toRadian(degrees));
@@ -110,18 +112,18 @@ class Arc extends PathVerb {
   Arc({
     required double r,
     String unit = '',
-    required this.startAngle,
-    required this.endAngle,
+    required this.start,
+    required this.end,
   }) : radius = XY.xx(r, unit: unit);
   Arc.ellipse({
     required this.radius,
-    required this.startAngle,
-    required this.endAngle,
+    required this.start,
+    required this.end,
   });
 
   final XY radius;
-  final double startAngle; // In degrees.
-  final double endAngle;
+  final double start; // In degrees.
+  final double end;
 
   @override
   String get verb => 'arc';
@@ -130,8 +132,8 @@ class Arc extends PathVerb {
   List<StyleOption> get specialOptions => [
         StringOption('x radius=${radius.xu}'),
         StringOption('y radius=${radius.yu}'),
-        StringOption('start angle=$startAngle'),
-        StringOption('end angle=$endAngle'),
+        StringOption('start angle=$start'),
+        StringOption('end angle=$end'),
       ];
 }
 
@@ -183,10 +185,10 @@ class Path extends Referable {
 }
 
 class Node extends Referable {
-  Node({
+  Node(
+    this.content, {
     this.place,
     List<StyleOption> options = const [],
-    this.content = '',
   }) : _options = options;
   final List<StyleOption> _options;
   final Placement? place;
