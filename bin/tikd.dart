@@ -79,7 +79,11 @@ Future<void> main(List<String> arguments) async {
     }
 
     Future<void> build() async {
-      await (isDart ? dartToSvg(filepath) : tikzToSvg(filepath));
+      try {
+        await (isDart ? dartToSvg(filepath) : tikzToSvg(filepath));
+      } catch (e) {
+        print('Error: $filepath failed to build: $e');
+      }
     }
 
     await build();

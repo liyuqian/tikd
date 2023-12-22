@@ -60,7 +60,7 @@ class LatexWrapper {
     print('Working in: ${dir.path}');
     final kSvgName = 'tmp.svg';
     final kTexName = 'tmp.tex';
-    await shell.run('pdflatex $kTexName');
+    await shell.run('pdflatex -interaction=nonstopmode $kTexName');
     await shell.run('pdf2svg tmp.pdf $kSvgName');
     final tmpSvg = p.join(dir.path, kSvgName);
     final tmpTex = p.join(dir.path, kTexName);
