@@ -6,5 +6,5 @@
 
 # Auto-generated or test files
 build
-example/*.svg
-example/*.tex
+example/karl.svg
+example/karl.tex
