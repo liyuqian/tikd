@@ -1,11 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:tikd/path.dart';
-
-import 'package:tikd/picture.dart';
-import 'package:tikd/style.dart';
-import 'package:tikd/wrapper.dart';
+import 'package:tikd/tikd.dart';
 
 Picture buildPicture() {
   final picture = Picture(options: [Scale(3), LineCap.round()]);

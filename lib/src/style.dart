@@ -1,6 +1,6 @@
-import 'package:tikd/base.dart';
-import 'package:tikd/path.dart';
-import 'package:tikd/picture.dart';
+import 'base.dart';
+import 'path.dart';
+import 'picture.dart';
 
 abstract class StyleOption extends Referable {}
 

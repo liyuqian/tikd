@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 import 'package:process_run/shell.dart';
-import 'package:tikd/base.dart';
-import 'package:tikd/picture.dart';
+
+import 'base.dart';
+import 'picture.dart';
 
 const String kName = 'tikd';
 

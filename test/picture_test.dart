@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:test/test.dart';
-import 'package:tikd/path.dart';
 import 'package:path/path.dart' as p;
+import 'package:test/test.dart';
+import 'package:tikd/tikd.dart';
 
 import '../example/karl.dart' as karl;
 

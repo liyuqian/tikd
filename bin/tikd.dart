@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:process_run/shell.dart';
-import 'package:tikd/wrapper.dart';
+import 'package:tikd/tikd.dart';
 
 const String version = '0.0.1';
 

@@ -1,6 +1,6 @@
-import 'package:tikd/base.dart';
-import 'package:tikd/path.dart';
-import 'package:tikd/style.dart';
+import 'base.dart';
+import 'path.dart';
+import 'style.dart';
 
 class Picture extends Section {
   Picture({List<StyleOption> options = const []}) : super(options: options);

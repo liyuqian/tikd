@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:tikd/path.dart';
-import 'package:tikd/picture.dart';
-import 'package:tikd/style.dart';
-import 'package:tikd/wrapper.dart';
+import 'package:tikd/tikd.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 Picture buildPicture() {

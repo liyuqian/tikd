@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:tikd/base.dart';
-import 'package:tikd/style.dart';
+import 'base.dart';
+import 'style.dart';
 
 double toRadian(double degrees) => degrees * (pi / 180);
 
