@@ -17,6 +17,7 @@ class StringOption extends StyleOption {
 
 final helpLinesStyle = StringOption('help lines');
 final singleArrowStyle = StringOption('->');
+final dashedStyle = StringOption('dashed');
 
 class Thickness extends StringOption {
   Thickness.veryThick() : super('very thick');
