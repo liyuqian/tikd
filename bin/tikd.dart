@@ -57,7 +57,7 @@ Future<void> main(List<String> arguments) async {
       return;
     }
     if (results.wasParsed(kStrVersion)) {
-      print('dartpost version: $version');
+      print('tikd version: $version');
       return;
     }
     if (results.rest.length != 1) {
