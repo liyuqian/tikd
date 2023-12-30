@@ -35,6 +35,28 @@ abstract class Section extends Referable {
   void namePath(Path p, String name) =>
       _add(r'\path', [StringOption('name path=$name')], p.definition);
 
+  void drawAngle(
+    String name,
+    Coordinate cA,
+    Coordinate cO,
+    Coordinate cB, {
+    double? radiusCm,
+    double eccentricity = 0.6,
+    bool isRight = false, // right angle or not
+  }) {
+    final radius = radiusCm == null
+        ? []
+        : [DoubleOption('angle radius', radiusCm, unit: 'cm')];
+    final List<StyleOption> options = [
+      StringOption('"$name"'),
+      StringOption('draw'),
+      DoubleOption('angle eccentricity', eccentricity),
+      ...radius,
+    ];
+    final angle = isRight ? 'right angle ' : 'angle';
+    _add(r'\pic', options, '{$angle = ${cA.inner}--${cO.inner}--${cB.inner}}');
+  }
+
   void addRaw(String raw) => _elements.add(RawString(raw));
   void addStyle(CustomStyle style) => _customStyles.add(style);
   void addScope(Scope scope) => _elements.add(scope);

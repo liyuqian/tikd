@@ -9,9 +9,9 @@ double toRadian(double degrees) => degrees * (pi / 180);
 
 abstract class Position extends Referable {
   StringPosition horizontalVertical(Position other) =>
-      StringPosition('($_core -| ${other._core})');
+      StringPosition('($inner -| ${other.inner})');
   StringPosition verticalHorizontal(Position other) =>
-      StringPosition('($_core |- ${other._core})');
+      StringPosition('($inner |- ${other.inner})');
 
   StringPosition operator ~/(Position other) => horizontalVertical(other);
   StringPosition operator >=(Position other) => verticalHorizontal(other);
@@ -19,7 +19,7 @@ abstract class Position extends Referable {
   Path operator >>(PathVerb verb) => Path(this) >> verb;
   Path operator >>>(Position next) => Path(this) >>> next;
 
-  String get _core => reference.replaceAll('(', '').replaceAll(')', '');
+  String get inner => reference.replaceAll('(', '').replaceAll(')', '');
 }
 
 class StringPosition extends Position {
@@ -203,7 +203,7 @@ class Node extends Referable {
   String get definition => 'node[$_allOptions] {$content}';
 
   String get _allOptions => [
-        ...place == null ? [] : [place!.name],
+        ...place == null ? [] : [place!.definition],
         ..._options
       ].join(', ');
 }

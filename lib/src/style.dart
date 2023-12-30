@@ -57,6 +57,8 @@ class Placement extends StyleOption {
   Placement.right({double? by, String unit = ''}) : this._('right', by, unit);
   Placement.aboveLeft({double? by, String unit = ''})
       : this._('above left', by, unit);
+  Placement.aboveRight({double? by, String unit = ''})
+      : this._('above right', by, unit);
 
   Placement._(this.name, this.value, this.unit);
   final String name;
