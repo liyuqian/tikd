@@ -15,6 +15,10 @@ class StringOption extends StyleOption {
   String get definition => value;
 }
 
+class NamePath extends StringOption {
+  NamePath(String name) : super('name path=$name');
+}
+
 final helpLinesStyle = StringOption('help lines');
 final singleArrowStyle = StringOption('->');
 final dashedStyle = StringOption('dashed');
@@ -51,6 +55,8 @@ class Placement extends StyleOption {
   Placement.below({double? by, String unit = ''}) : this._('below', by, unit);
   Placement.left({double? by, String unit = ''}) : this._('left', by, unit);
   Placement.right({double? by, String unit = ''}) : this._('right', by, unit);
+  Placement.aboveLeft({double? by, String unit = ''})
+      : this._('above left', by, unit);
 
   Placement._(this.name, this.value, this.unit);
   final String name;

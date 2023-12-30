@@ -26,8 +26,8 @@
 \end{scope}
 \filldraw[fill=green!20, draw=anglecolor]  (0.0, 0.0) -- (3.0mm, 0.0mm) arc[x radius=3.0mm, y radius=3.0mm, start angle=0.0, end angle=30.0];
 \draw  (1.9318516525781366mm, 0.5176380902050415mm) node[anglecolor] {$\alpha$};
-\draw[important line, sincolor]  (0.8660254037844387, 0.49999999999999994) -- node[left, fill=white] {$\sin \alpha$} ({(0.8660254037844387, 0.49999999999999994)} |- {x axis});
-\draw[important line, coscolor]  ({(0.8660254037844387, 0.49999999999999994)} |- {x axis}) -- node[below, fill=white] {$\cos \alpha$} (0.0, 0.0);
+\draw[important line, sincolor]  (0.8660254037844387, 0.49999999999999994) -- node[left, fill=white] {$\sin \alpha$} (0.8660254037844387, 0.49999999999999994 |- x axis);
+\draw[important line, coscolor]  (0.8660254037844387, 0.49999999999999994 |- x axis) -- node[below, fill=white] {$\cos \alpha$} (0.0, 0.0);
 \path[name path=upward line]  (1.0, 0.0) -- (1.0, 1.0);
 \path[name path=sloped line]  (0.0, 0.0) -- (1.299038105676658, 0.7499999999999999);
 \draw[name intersections={of=upward line and sloped line, by=t}, very thick, orange]  (1.0, 0.0) -- node[right, fill=white] {$\displaystyle \tan \alpha \color{black}=\frac{{\color{red}\sin \alpha}}{\color{blue}\cos \alpha}$} (t);

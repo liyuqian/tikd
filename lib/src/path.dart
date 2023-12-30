@@ -3,19 +3,23 @@ import 'dart:math';
 import 'base.dart';
 import 'style.dart';
 
+import 'package:vector_math/vector_math_64.dart';
+
 double toRadian(double degrees) => degrees * (pi / 180);
 
 abstract class Position extends Referable {
   StringPosition horizontalVertical(Position other) =>
-      StringPosition('({$reference} -| {${other.reference}})');
+      StringPosition('($_core -| ${other._core})');
   StringPosition verticalHorizontal(Position other) =>
-      StringPosition('({$reference} |- {${other.reference}})');
+      StringPosition('($_core |- ${other._core})');
 
   StringPosition operator ~/(Position other) => horizontalVertical(other);
   StringPosition operator >=(Position other) => verticalHorizontal(other);
 
   Path operator >>(PathVerb verb) => Path(this) >> verb;
   Path operator >>>(Position next) => Path(this) >>> next;
+
+  String get _core => reference.replaceAll('(', '').replaceAll(')', '');
 }
 
 class StringPosition extends Position {
@@ -34,6 +38,7 @@ class XY extends Position {
   XY.polar(double degrees, double r, {this.unit = ''})
       : x = r * cos(toRadian(degrees)),
         y = r * sin(toRadian(degrees));
+  XY.vec(Vector2 v, {String unit = ''}) : this(v.x, v.y, unit: unit);
 
   final double x, y;
   final String unit;
@@ -211,5 +216,5 @@ class Coordinate extends Position {
   String get definition => 'coordinate($name)';
 
   @override
-  String get reference => name;
+  String get reference => '($name)';
 }
