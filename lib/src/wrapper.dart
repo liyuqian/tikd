@@ -29,8 +29,7 @@ class LatexWrapper {
 \usepackage{amsmath}
 \usepackage{amssymb}
 
-\usetikzlibrary{angles}
-\usetikzlibrary{intersections}
+\usetikzlibrary{angles, intersections, backgrounds}
 
 \begin{document}
 ''';

@@ -71,10 +71,18 @@ abstract class Section extends Referable {
   String get definition => toLines().join('\n');
 
   List<String> buildLines() {
+    final List<String> background = [];
+    if (backgroundColor != null) {
+      background.addAll([
+        'background rectangle/.style={fill=$backgroundColor},',
+        'show background rectangle'
+      ]);
+    }
     List<String> lines = [
       '[',
       ..._options.map((o) => '  ${o.reference},'),
       ..._customStyles.map((s) => '  ${s.definition},'),
+      ...background,
       ']',
     ];
     for (final element in _elements) {
@@ -86,4 +94,6 @@ abstract class Section extends Referable {
   final List<StyleOption> _options;
   final List<CustomStyle> _customStyles = [];
   final List<Referable> _elements = [];
+
+  Color? backgroundColor;
 }
